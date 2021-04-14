@@ -17,22 +17,22 @@ API ENDPOINTS & EFFECTS
 
 POST /allinone
 <p align="center">
-  <img src="images/allinone.PNG" title="Logo">
+  <img src="Images/allinone.PNG" title="Logo">
 </p>
 
 GET /elements
 <p align="center">
-  <img src="images/elements.PNG" title="Logo">
+  <img src="Images/elements.PNG" title="Logo">
 </p>
 
 POST /element/{id}
 <p align="center">
-  <img src="images/element.PNG" title="Logo">
+  <img src="Images/element.PNG" title="Logo">
 </p>
 
 POST /encode
 <p align="center">
-  <img src="images/encode.PNG" title="Logo">
+  <img src="Images/encode.PNG" title="Logo">
 </p>
 
 POST /decode
