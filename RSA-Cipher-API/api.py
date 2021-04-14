@@ -30,6 +30,10 @@ class CiphItem(BaseModel):
     decrypted: str
 
 
+class SingleMessage(BaseModel):
+    message: str
+
+
 '''
 API's authentication 
 '''
@@ -70,7 +74,7 @@ async def allinone(ciph: CiphItem):
     return {'message': ciph.message, 'encrypted': temp_enc, 'decrypted': temp_dec}
 
 
-@app.post('/elements')
+@app.get('/elements')
 async def elements():
     return ciph_db
 
@@ -81,10 +85,10 @@ async def element(id: int):
 
 
 @app.post('/encode')
-async def encode(ciph: CiphItem):
-    return {'message': f'Encrypted message: {RSA_Logic.encode(ciph.message, public)}'}
+async def encode(mess: SingleMessage):
+    return {'message': f'Encrypted message: {RSA_Logic.encode(mess.message, public)}'}
 
 
 @app.post('/decode')
-async def decode(ciph: CiphItem):
-    return {'message': f'Decrypted message: {RSA_Logic.decode(ciph.encrypted, private)}'}
+async def decode(mess: SingleMessage):
+    return {'message': f'Decrypted message: {RSA_Logic.decode(mess.message, private)}'}
