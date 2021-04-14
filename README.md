@@ -37,7 +37,7 @@ POST /encode
 
 POST /decode
 <p align="center">
-  <img src="images/decode.PNG" title="Logo">
+  <img src="Images/decode.PNG" title="Logo">
 </p>
 
 
