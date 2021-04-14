@@ -1,93 +1,90 @@
 from fastapi import Depends, FastAPI, HTTPException, status
-from pydantic.class_validators import Optional
-from cipher import RSA_Logic
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
-from fastapi.security import HTTPBasic, HTTPBasicCredentials, OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from http import HTTPStatus
+import secrets
+
+from cipher import RSA_Logic
 
 app = FastAPI()
 security = HTTPBasic()
 
+'''
+Cipher parameters
+'''
 public, private = RSA_Logic.generate_keys()
 
-users_db = {
-    "hubertkniola": {
-        "username": "hubertkniola",
-        "full_name": "Hubert Knioła",
-        "email": "hubert_kniola@gmail.com",
-        "hashed_password": "password",
-        "disabled": False,
-    },
-}
+'''
+API models
+'''
+
+ciph_db = []
+
+users_db = [{'username': 'hubertkniola',
+             'password': 'password'}, ]
 
 
-class User(BaseModel):
-    username: str
-    email: Optional[str] = None
-    full_name: Optional[str] = None
-    disabled: Optional[bool] = None
+class CiphItem(BaseModel):
+    message: str
+    encrypted: str
+    decrypted: str
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+'''
+API's authentication 
+'''
+
+for i, val in enumerate(ciph_db):
+    print(i)
+    print(val)
 
 
-# Security
-
-@app.get("/items/")
-async def read_items(token: str = Depends(oauth2_scheme)):
-    return {"token": token}
-
-
-def password_hasher(password: str):
-    return RSA_Logic.encode(password, public)
-
-
-def get_user(db, username: str):
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+def get_current_user(cred: HTTPBasicCredentials = Depends(security)):
+    correct_username = secrets.compare_digest(cred.username, "hubertkniola")
+    correct_password = secrets.compare_digest(cred.password, "password")
+    if not (correct_username and correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return cred.username
 
 
-class UserInDB(User):
-    hashed_password: str
+@app.get("/user")
+def read_current_user(username: str = Depends(get_current_user)):
+    return {"username": username}
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    user = decode_token(token)
-    return user
+'''
+Simple basic endpoints with implemented methods
+'''
 
 
-async def get_active_user(current_user: User = Depends(get_current_user)):
-    if current_user.disabled:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return current_user
+@app.post('/allinone')
+async def allinone(ciph: CiphItem):
+    temp_enc = RSA_Logic.encode(ciph.message, public)
+    temp_dec = RSA_Logic.decode(temp_enc, private)
+    element = {'message': ciph.message, 'encrypted': temp_enc, 'decrypted': temp_dec}
+    ciph_db.append(element)
+    return {'message': ciph.message, 'encrypted': temp_enc, 'decrypted': temp_dec}
 
 
-@app.get("/users/me")
-async def read_users_me(current_user: User = Depends(get_current_user)):
-    return current_user
+@app.post('/elements')
+async def elements():
+    return ciph_db
 
 
-@app.post("/login")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    user_dict = users_db.get(form_data.username)
-    if not user_dict:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-    user = UserInDB(**user_dict)
-    hashed_password = password_hasher(form_data.password)
-    if not hashed_password == user.hashed_password:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
-
-    return {"access_token": user.username, "token_type": "bearer"}
+@app.post('/element/{id}')
+async def element(id: int):
+    return ciph_db[id]
 
 
-# Others
-
-@app.post('/encode/{to_encrypt}')
-async def encode(to_encrypt: str):
-    return {'message': f'Encrypted message: {RSA_Logic.encode(to_encrypt, public)}'}
+@app.post('/encode')
+async def encode(ciph: CiphItem):
+    return {'message': f'Encrypted message: {RSA_Logic.encode(ciph.message, public)}'}
 
 
-@app.post('/decode/{to_decode}')
-async def decode(to_decode: str):
-    return {'message': f'Encrypted message: {RSA_Logic.decode(to_decode, private)}'}
-
+@app.post('/decode')
+async def decode(ciph: CiphItem):
+    return {'message': f'Decrypted message: {RSA_Logic.decode(ciph.encrypted, private)}'}
