@@ -1,7 +1,7 @@
 # RSACipher
-Simple RSA cipher with FastAPI &amp; Unittests
+Simple RSA cipher with FastAPI & Unittests
 
-Title: Recruitment task
+Title: Recruitment task\
 Author: Hubert Knioła
 
 Completed tasks:
