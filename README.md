@@ -14,20 +14,31 @@ Completed tasks:
 - Dockerization - IN
 
 API ENDPOINTS & EFFECTS
+
 POST /allinone
-![alt text](https://github.com/hubert-kniola/RSACipher/images/allinone.PNG?raw=true)
+<p align="center">
+  <img src="images/allinone.PNG" title="Logo">
+</p>
 
 GET /elements
-![alt text](https://github.com/hubert-kniola/RSACipher/images/elements.PNG?raw=true)
+<p align="center">
+  <img src="images/elements.PNG" title="Logo">
+</p>
 
 POST /element/{id}
-![alt text](https://github.com/hubert-kniola/RSACipher/images/element.PNG?raw=true)
+<p align="center">
+  <img src="images/element.PNG" title="Logo">
+</p>
 
 POST /encode
-![alt text](https://github.com/hubert-kniola/RSACipher/images/encode.PNG?raw=true)
+<p align="center">
+  <img src="images/encode.PNG" title="Logo">
+</p>
 
 POST /decode
-![alt text](https://github.com/hubert-kniola/RSACipher/images/decode.PNG?raw=true)
+<p align="center">
+  <img src="images/decode.PNG" title="Logo">
+</p>
 
 
 
