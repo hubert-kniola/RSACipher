@@ -23,13 +23,35 @@ Running tests
 pytest tests_cipher.py
 ```
 
-TESTS
+# TESTS
 
 <p align="center">
   <img src="Images/tests.PNG" title="Tests">
 </p>
 
-API ENDPOINTS & EFFECTS
+# BASIC AUTHENTICATION
+
+<p align="center">
+  <img src="Images/login.PNG" title="Login">
+</p>
+
+<p align="center">
+  <img src="Images/logged.PNG" title="Logged">
+</p>
+
+<p align="center">
+  <img src="Images/invaliduser.PNG" title="Invalid user">
+</p>
+
+<p align="center">
+  <img src="Images/correct.PNG" title="Request after login">
+</p>
+
+<p align="center">
+  <img src="Images/invalid.PNG" title="Request without login">
+</p>
+
+# API ENDPOINTS & EFFECTS
 
 REQUEST FORM /allinone
 <p align="center">
