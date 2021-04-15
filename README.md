@@ -13,6 +13,22 @@ Completed tasks:
 - Code documentations - DONE
 - Dockerization - IN
 
+Starting the server
+```
+uvicorn api:app --reload
+```
+
+Running tests
+```
+pytest tests_cipher.py
+```
+
+TESTS
+
+<p align="center">
+  <img src="Images/tests.PNG" title="All in one">
+</p>
+
 API ENDPOINTS & EFFECTS
 
 POST /allinone
