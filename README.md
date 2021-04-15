@@ -26,10 +26,15 @@ pytest tests_cipher.py
 TESTS
 
 <p align="center">
-  <img src="Images/tests.PNG" title="All in one">
+  <img src="Images/tests.PNG" title="Tests">
 </p>
 
 API ENDPOINTS & EFFECTS
+
+REQUEST FORM /allinone
+<p align="center">
+  <img src="Images/allinone-request.PNG" title="All in one">
+</p>
 
 POST /allinone
 <p align="center">
@@ -46,9 +51,19 @@ POST /element/{id}
   <img src="Images/element.PNG" title="Element">
 </p>
 
+REQUEST FORM /encode
+<p align="center">
+  <img src="Images/encode-request.PNG" title="Encode">
+</p>
+
 POST /encode
 <p align="center">
   <img src="Images/encode.PNG" title="Encode">
+</p>
+
+REQUEST FORM /decode
+<p align="center">
+  <img src="Images/decode-request.PNG" title="Encode">
 </p>
 
 POST /decode
