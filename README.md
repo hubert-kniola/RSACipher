@@ -33,7 +33,7 @@ API ENDPOINTS & EFFECTS
 
 REQUEST FORM /allinone
 <p align="center">
-  <img src="Images/allinone-request.PNG" title="All in one">
+  <img src="Images/allinone-req.PNG" title="All in one">
 </p>
 
 POST /allinone
