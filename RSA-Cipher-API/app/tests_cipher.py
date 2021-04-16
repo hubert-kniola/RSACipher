@@ -1,5 +1,4 @@
-from cipher import RSA_Logic
-import pytest
+from app.cipher import RSA_Logic
 
 '''
 Tests arguments

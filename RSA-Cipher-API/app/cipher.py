@@ -33,8 +33,10 @@ class RSA_Logic:  # RSA cipher logic class
 
     @staticmethod
     def find_e(phi: int, bit: int = 16) -> int:  # Function to find e number
-        while e := random_prime(bit):
+        e = random_prime(bit)
+        while True:
             if coprimes(phi, e): return e
+            e = random_prime(bit)
 
     @staticmethod
     def generate_keys() -> ((int, int), (int, int)):  # Function generate public and private keys of RSA cipher
@@ -80,7 +82,7 @@ if __name__ == '__main__':
     text_to_encrypt = 'To jest zakodowana wiadomość !@#$%^&*()_+1234567890-='  # plain text
 
     encrypted_message = RSA_Logic.encode(text_to_encrypt, public)  # encryption of gives plain text
-    print(f'[{len(encrypted_message)}] {encrypted_message=}')
+    print(f'[{len(encrypted_message)}] {encrypted_message}')
 
     decrypted_message = RSA_Logic.decode(encrypted_message, private)  # decryption of encrypted message
-    print(f'[{len(decrypted_message)}] {decrypted_message=}')
+    print(f'[{len(decrypted_message)}] {decrypted_message}')

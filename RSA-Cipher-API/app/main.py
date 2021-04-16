@@ -1,9 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
-from pywin.dialogs import status
+from http import HTTPStatus
 
-from cipher import RSA_Logic
+from .cipher import RSA_Logic
 from passlib.context import CryptContext
 
 app = FastAPI()  # API's instance
@@ -24,7 +24,7 @@ ciph_db = []  # Basic database used to encoding and decoding
 users_db = {  # Basic database with one user used to authentication
     "hubertkniola": {
         "username": "hubertkniola",
-        "hashed_password": "$2b$12$z0crAbk1cJtTL7MRm55mXuPnLGteTdKSfVEwWouasQNQtvmNOACcu", # 'password' in hash
+        "hashed_password": pwd_context.hash('password'),  # 'password' in hash
         "disabled": False,
     }
 }
@@ -45,7 +45,7 @@ class User(BaseModel):  # User model
     disabled: bool = None
 
 
-class UserInDB(User):  # User's password model
+class UserPassword(User):  # User's password model
     hashed_password: str
 
 
@@ -57,7 +57,7 @@ API's authentication
 def get_user(db, username: str):  # Function to get user from database
     if username in db:
         user_dict = db[username]
-        return UserInDB(**user_dict)
+        return UserPassword(**user_dict)
 
 
 def get_password_hash(password):  # Function to hash gives password
@@ -68,8 +68,8 @@ def verify_password(plain_password, hashed_password):  # Function to verify give
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def authenticate_user(fake_db, username: str, password: str):  # Function to authenticate user with database
-    user = get_user(fake_db, username)
+def authenticate_user(users_db, username: str, password: str):  # Function to authenticate user with database
+    user = get_user(users_db, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -77,15 +77,15 @@ def authenticate_user(fake_db, username: str, password: str):  # Function to aut
     return user
 
 
-def get_current_username(credentials: HTTPBasicCredentials = Depends(security)):  # Function to simple authentication
-    user = authenticate_user(users_db, credentials.username, credentials.password)
+def get_current_username(data: HTTPBasicCredentials = Depends(security)):  # Function to simple authentication
+    user = authenticate_user(users_db, data.username, data.password)
     if not user:
         raise HTTPException(  # Raise exception after check thas user does not exist
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=HTTPStatus.UNAUTHORIZED,
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Basic"},
         )
-    return credentials.username
+    return data.username
 
 
 @app.get("/example")   # Endpoint used to get name of the current user
@@ -117,16 +117,16 @@ async def elements():
     return ciph_db
 
 
-@app.post('/element/{id}')  # Endpoint to get one of storeditems
+@app.get('/element/{id}')  # Endpoint to get one of storeditems
 async def element(id: int):
     return ciph_db[id]
 
 
 @app.post('/encode')  # Endpoint to encode gives message
 async def encode(mess: SingleMessage):
-    return {'message': f'Encrypted message: {RSA_Logic.encode(mess.message, public)}'}
+    return {'message': f'{RSA_Logic.encode(mess.message, public)}'}
 
 
 @app.post('/decode')  # Endpoint to decode gives message
 async def decode(mess: SingleMessage):
-    return {'message': f'Decrypted message: {RSA_Logic.decode(mess.message, private)}'}
+    return {'message': f'{RSA_Logic.decode(mess.message, private)}'}
