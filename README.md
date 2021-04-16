@@ -2,25 +2,31 @@
 Simple RSA cipher with FastAPI & Unittests
 
 Title: Recruitment task\
-Author: Hubert Knioła
+Author: **Hubert Knioła**
 
 Completed tasks:
-- RSA Cipher - DONE
-- Encode and decode methods - DONE
-- Simple Unit Tests - DONE
-- FastAPI Server with previous methods - DONE
-- BasicAuth FastAPI - DONE
-- Code documentations - DONE
-- Dockerization - IN
+- RSA Cipher - *DONE*
+- Encode and decode methods - *DONE*
+- Simple Unit Tests - *DONE*
+- FastAPI Server with previous methods - *DONE*
+- BasicAuth FastAPI - *DONE*
+- Code documentations - *DONE*
+- Dockerization - *DONE*
 
-Starting the server
-```
-uvicorn api:app --reload
+**Starting the server as a container**
+```bash
+docker build -t cipher_api .
+docker run -d --name apicontainer -p 80:80 cipher_api
 ```
 
-Running tests
+**Starting the server locally**
+```bash
+uvicorn app.main:app --reload
 ```
-pytest tests_cipher.py
+
+**Running tests**
+```bash
+pytest app/tests_cipher.py
 ```
 
 # TESTS
